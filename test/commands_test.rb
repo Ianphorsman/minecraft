@@ -349,6 +349,24 @@ eof
     assert_match "time add 100", @ext.server.string.gsub("\n", " ")
   end
 
+  # Todo command tests.
+  sandbox_test "should add and remove a global todo item" do
+    @ext = Minecraft::Extensions.new(StringIO.new, {})
+    @ext.call_command("basicxman", "todo", "foo", "bar")
+    @ext.call_command("basicxman", "todo", "bar")
+    assert_match "Added", @ext.server.string
+    assert_equal "foo bar", @ext.todo_items[0]
+
+    @ext.call_command("basicxman", "todo")
+    assert_match "1. foo bar", @ext.server.string.split("\n")[-2]
+    assert_match "2. bar", @ext.server.string.split("\n")[-1]
+
+    @ext.call_command("basicxman", "finished", "foo", "bar")
+    @ext.call_command("basicxman", "finished", "1")
+    assert_match "Hurray!", @ext.server.string
+    assert_equal 0, @ext.todo_items.length
+  end
+
   # Remaining commands testing (should test to ensure no errors are thrown in
   # the command execution).
   sandbox_test "should run commands without failure" do
