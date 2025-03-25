@@ -104,3 +104,5 @@ Notice
 ------
 
 Minecraft is copyright of Mojang AB and developed by Markus Persson (@notch).
+  
+    Hello world!
